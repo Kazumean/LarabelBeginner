@@ -5,6 +5,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\BooksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,42 +19,26 @@ use Illuminate\Support\Facades\Validator;
 */
 
 /**
- * 本の一覧表示
+ * 本ダッシュボード表示
  */
-Route::get('/', function () {
-    return view('books');
-});
+Route::get('/', [BooksController::class, 'index']);
 
 /**
  * 本を追加
  */
-Route::post('/books', function(Request $request) {
-    // dd($request);
+Route::post('/books', [BooksController::class, 'store']);
 
-    //バリデーション
-    $validator = Validator::make($request->all(), [
-        'item_name' => 'required|max:255',
-    ]);
+//更新画面
+Route::post('/booksedit/{books}', [BooksController::class, 'edit']);
 
-    //バリデーション:エラー 
-    if ($validator->fails()) {
-        return redirect('/')
-            ->withInput()
-            ->withErrors($validator);
-    }
-});
+//更新処理
+Route::post('/books/update', [BooksController::class, 'update']);
 
 /**
  * 本を削除
  */
-Route::delete('/book/{book}', function(Book $book) {
-    //
-});
+Route::delete('/book/{book}', [BooksController::class, 'destroy']);
 
+//Auth
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\BooksController::class, 'index'])->name('home');
