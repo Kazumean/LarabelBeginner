@@ -83,6 +83,7 @@ class BooksController extends Controller{
         $books = Book::where('user_id', Auth::user()->id)
         ->orderBy('created_at', 'asc')
         ->paginate(3);
+        // ddd($books);
         return view('books', ['books' => $books]);
     }
 
